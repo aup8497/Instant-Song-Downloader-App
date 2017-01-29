@@ -11,6 +11,8 @@
 
 ## Here are some snapshots of my very own Instant-Music Android app
 
+<img src="https://github.com/aup8497/Instant-Song-Downloader-App/blob/master/screenshots/Screenshot_2017-01-29-22-00-27.png" alt="alt text" width="360" height="640">
+
 ![] (https://github.com/aup8497/Instant-Song-Downloader-App/blob/master/screenshots/Screenshot_2017-01-29-22-00-27.png =360x640)
  
 ![] (https://github.com/aup8497/Instant-Song-Downloader-App/blob/master/screenshots/Screenshot_2017-01-29-22-02-16.png =640x360)
