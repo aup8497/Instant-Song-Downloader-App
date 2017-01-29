@@ -13,11 +13,9 @@
 
 <img src="https://github.com/aup8497/Instant-Song-Downloader-App/blob/master/screenshots/Screenshot_2017-01-29-22-00-27.png" alt="alt text" width="360" height="640">
 
-![] (https://github.com/aup8497/Instant-Song-Downloader-App/blob/master/screenshots/Screenshot_2017-01-29-22-00-27.png =360x640)
- 
-![] (https://github.com/aup8497/Instant-Song-Downloader-App/blob/master/screenshots/Screenshot_2017-01-29-22-02-16.png =640x360)
- 
- ![] (https://github.com/aup8497/Instant-Song-Downloader-App/blob/master/screenshots/Screenshot_2017-01-29-22-19-53.png =360x640)
+<img src="https://github.com/aup8497/Instant-Song-Downloader-App/blob/master/screenshots/Screenshot_2017-01-29-22-02-16.png" alt="alt text" width="640" height="360">
+
+<img src="https://github.com/aup8497/Instant-Song-Downloader-App/blob/master/screenshots/Screenshot_2017-01-29-22-19-53.png" alt="alt text" width="360" height="640">
 
 ## The MIT LICENSE
 
