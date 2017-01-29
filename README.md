@@ -11,13 +11,13 @@
 
 ## Here are some snapshots of my very own Instant-Music Android app
 
-[id]: https://github.com/aup8497/Instant-Song-Downloader-App/blob/master/screenshots/Screenshot_2017-01-29-22-00-27.png
+[id]: (https://github.com/aup8497/Instant-Song-Downloader-App/blob/master/screenshots/Screenshot_2017-01-29-22-00-27.png =360x640)
 ![alt text][id]
  
-[id]: https://github.com/aup8497/Instant-Song-Downloader-App/blob/master/screenshots/Screenshot_2017-01-29-22-02-16.png
+[id]: (https://github.com/aup8497/Instant-Song-Downloader-App/blob/master/screenshots/Screenshot_2017-01-29-22-02-16.png =640x360)
 ![alt text][id]
  
- [id]: https://github.com/aup8497/Instant-Song-Downloader-App/blob/master/screenshots/Screenshot_2017-01-29-22-19-53.png
+ [id]: (https://github.com/aup8497/Instant-Song-Downloader-App/blob/master/screenshots/Screenshot_2017-01-29-22-19-53.png =360x640)
  ![alt text][id]
 
 ## The MIT LICENSE
