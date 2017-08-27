@@ -29,8 +29,6 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
-//    public Document d;
-//    public Elements ele;
     private DownloadManager downloadManager;
     EditText songname;
     Button search;
@@ -54,6 +52,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
+    // Async task for downloading
     public class downloader extends AsyncTask<String, Void ,Void> {
 
         @Override
@@ -64,31 +63,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
             String songname=sname1.trim();
             String sname = songname.replaceAll(" ","+");
 
-            //for debugging
-            Log.i("\nCAME HERE background\n\n","hello");
-
             String urlfromyoutube= ("https://m.youtube.com/results?search_query=" + sname );
 
+            // get the link of the video using entered search keyword
             try{
-
-                Document doc = Jsoup.connect(urlfromyoutube)
+            
+                  Document doc = Jsoup.connect(urlfromyoutube)
                         .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.120 Safari/535.2")
                         .timeout(6000)
                         .get();
-                Elements ele = doc.select("ol.item-section");
+                  Elements ele = doc.select("ol.item-section");
 
-                Log.i("\nCAME HERE doc ","d = "+doc.text());
-
-
-                for (Element element : ele.select("li") ) {
+                  for (Element element : ele.select("li") ) {
 
                     download_url = element.select("a.yt-uix-sessionlink.spf-link").attr("href");
                     songt=element.select("a.yt-uix-sessionlink.spf-link").attr("title");
-                    //System.out.println(download_url);
 
-                    // Log.i("CAME HERE download url ",download_url);
-
-//                    count++;
                     if (flag == 0) {
                         if (download_url.contains("/watch?")) {
                             first_url = download_url;
@@ -97,52 +87,29 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         }
                     }
 
-                }
+                  }
+                
+                // try to download the song using youtube in mp3 API.
+                    urlforyimp3 = ("http://www.youtubeinmp3.com/fetch/?video=https://www.youtube.com" + first_url);
 
-
-                Log.i("\nCAME HERE for ","first-url = "+first_url);
-
-                urlforyimp3 = ("http://www.youtubeinmp3.com/fetch/?video=https://www.youtube.com" + first_url);
-//            System.out.println("this is for debugging purposes only :url: "+url);
-                Log.i("\n yinmp3 ","url = "+urlforyimp3);
-
-                //this is added intensionally
-//                url="http://www.youtubeinmp3.com/fetch/?video=https://m.youtube.com/watch?v=YQHsXMglC9A";
-
-                /////debug starts here
-
-//                int flagToDifferenciateUrl = 0;
-//                String finalurl = "";
-
-                Document sd;
-//                try {
+                    Document sd;
                     sd = Jsoup.connect(urlforyimp3).timeout(6000).get();
-
-
                     Elements ele2 = sd.select("div.infoBox");
 
-                    Log.i("came here","got html page");
-                    Log.i("HTML PAGE",sd.text());
-
-
                     for (Element element2 : ele2.select("p")) {
-
                         finalurl = "http://www.youtubeinmp3.com" + element2.select("a.button.fullWidth").attr("href");
-                        Log.i("\n\nhtml page\n\n",finalurl);
-
                     }
-//                }catch (IOException e){
-//                    e.printStackTrace();
-//                }
-                    //////debug ends here
 
                 }catch (Exception e) {
+                
+                    // in case this fails to give direct link, make flag=1 which indicates that it has redirected it to another link for downloading.
                     e.printStackTrace();
                     flagToDifferenciateUrl = 1;
                     finalurl = urlforyimp3 ;
 
                 } finally {
 
+                    // download from the final url link, which provides direct link to the song
                     if ( finalurl!="" && flagToDifferenciateUrl==1) {
                         flagToDifferenciateUrl=0;
                         downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
@@ -171,45 +138,28 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
+     public void onClick(View view) {
+         ConnectivityManager cm =
+                 (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
 
+         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
-         public void onClick(View view) {
-
-             ConnectivityManager cm =
-                     (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
-
-             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-             boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-
-            if (songname.getText().toString().equals("") ) {
-                Toast.makeText(MainActivity.this, "Enter Text", LENGTH_SHORT).show();
-//                Log.v("\nCAME HERE 1\n\n", String.valueOf(songname.getText()));
-            }else if(!isConnected){
-                Toast.makeText(MainActivity.this, "No Internet Connectivity!", LENGTH_SHORT).show();
-
-            } else {
-                String songName = songname.getText().toString();
-//                songName.replaceAll(" ","+");
-
-                downloader task=new downloader();
-//                downloader.sname=songName;
-//                Log.v("\nCAME HERE 1\n\n", String.valueOf(songname.getText()));
-//                Toast.makeText(MainActivity.this,"hi", LENGTH_SHORT).show();
-
-                Log.i("\nCAME HERE on click \n\n","came here ");
-
-                try{
-                    task.execute(songName);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-//                Log.v("\nCAME HERE 3\n\n",null);
-
-//                task
-
-
+        if (songname.getText().toString().equals("") ) {
+            Toast.makeText(MainActivity.this, "Enter Text", LENGTH_SHORT).show();
+        }else if(!isConnected){
+            Toast.makeText(MainActivity.this, "No Internet Connectivity!", LENGTH_SHORT).show();
+        } else {
+            String songName = songname.getText().toString();
+            downloader task=new downloader();                
+            try{
+                task.execute(songName);
+            }catch (Exception e){
+                e.printStackTrace();
             }
-        }//end of on click method
+
+        }
+    }//end of on click method
 
 
 
