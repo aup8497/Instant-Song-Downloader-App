@@ -67,7 +67,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //            String sname = songname.replaceAll(" ","+");
 
             //for debugging
-//            Log.i("\nCAME HERE background\n\n","hello");
+            Log.i("\nCAME HERE background\n\n","hello");
 //
 //            String url_to_get_download_link= ("https://download-song.herokuapp.com/?song_name=" + sname );
 
