@@ -16,6 +16,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.*;
+
 import org.jsoup.Jsoup;
 import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Document;
@@ -29,8 +33,6 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
-//    public Document d;
-//    public Elements ele;
     private DownloadManager downloadManager;
     EditText songname;
     Button search;
@@ -62,89 +64,92 @@ public class MainActivity extends Activity implements View.OnClickListener {
             int flagToDifferenciateUrl=0;
             String sname1=params[0];
             String songname=sname1.trim();
-            String sname = songname.replaceAll(" ","+");
+//            String sname = songname.replaceAll(" ","+");
 
             //for debugging
-            Log.i("\nCAME HERE background\n\n","hello");
-
-            String urlfromyoutube= ("https://m.youtube.com/results?search_query=" + sname );
+//            Log.i("\nCAME HERE background\n\n","hello");
+//
+//            String url_to_get_download_link= ("https://download-song.herokuapp.com/?song_name=" + sname );
 
             try{
 
-                Document doc = Jsoup.connect(urlfromyoutube)
-                        .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.120 Safari/535.2")
-                        .timeout(6000)
-                        .get();
-                Elements ele = doc.select("ol.item-section");
-
-                Log.i("\nCAME HERE doc ","d = "+doc.text());
-
-
-                for (Element element : ele.select("li") ) {
-
-                    download_url = element.select("a.yt-uix-sessionlink.spf-link").attr("href");
-                    songt=element.select("a.yt-uix-sessionlink.spf-link").attr("title");
-                    //System.out.println(download_url);
-
-                    // Log.i("CAME HERE download url ",download_url);
-
-//                    count++;
-                    if (flag == 0) {
-                        if (download_url.contains("/watch?")) {
-                            first_url = download_url;
-                            songtitle=songt;
-                            flag = 1;
-                        }
-                    }
-
+                StringBuilder result = new StringBuilder();
+                URL url = new URL("http://download-song.herokuapp.com/?song_name="+songname);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String line;
+                while ((line = rd.readLine()) != null) {
+                    result.append(line);
                 }
-
-
-                Log.i("\nCAME HERE for ","first-url = "+first_url);
-
-                urlforyimp3 = ("http://www.youtubeinmp3.com/fetch/?video=https://www.youtube.com" + first_url);
-//            System.out.println("this is for debugging purposes only :url: "+url);
-                Log.i("\n yinmp3 ","url = "+urlforyimp3);
-
-                //this is added intensionally
-//                url="http://www.youtubeinmp3.com/fetch/?video=https://m.youtube.com/watch?v=YQHsXMglC9A";
-
-                /////debug starts here
-
-//                int flagToDifferenciateUrl = 0;
-//                String finalurl = "";
-
-                Document sd;
-//                try {
-                    sd = Jsoup.connect(urlforyimp3).timeout(6000).get();
-
-
-                    Elements ele2 = sd.select("div.infoBox");
-
-                    Log.i("came here","got html page");
-                    Log.i("HTML PAGE",sd.text());
-
-
-                    for (Element element2 : ele2.select("p")) {
-
-                        finalurl = "http://www.youtubeinmp3.com" + element2.select("a.button.fullWidth").attr("href");
-                        Log.i("\n\nhtml page\n\n",finalurl);
-
-                    }
-//                }catch (IOException e){
-//                    e.printStackTrace();
+                rd.close();
+//                return result.toString();
+                finalurl = result.toString();
+                finalurl = finalurl.substring(1,finalurl.length()-1);
+                String[] name_and_url = finalurl.split("-----");
+                songtitle = name_and_url[0];
+                finalurl = name_and_url[1];
+//                Document doc = Jsoup.connect(urlfromyoutube)
+//                        .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.120 Safari/535.2")
+//                        .timeout(6000)
+//                        .get();
+//                Elements ele = doc.select("ol.item-section");
+//
+//                Log.i("\nCAME HERE doc ","d = "+doc.text());
+//
+//
+//                for (Element element : ele.select("li") ) {
+//
+//                    download_url = element.select("a.yt-uix-sessionlink.spf-link").attr("href");
+//                    songt=element.select("a.yt-uix-sessionlink.spf-link").attr("title");
+//                    //System.out.println(download_url);
+//
+//                    // Log.i("CAME HERE download url ",download_url);
+//
+////                    count++;
+//                    if (flag == 0) {
+//                        if (download_url.contains("/watch?")) {
+//                            first_url = download_url;
+//                            songtitle=songt;
+//                            flag = 1;
+//                        }
+//                    }
+//
 //                }
-                    //////debug ends here
+//
+//
+//                Log.i("\nCAME HERE for ","first-url = "+first_url);
+//
+//                urlforyimp3 = ("http://www.youtubeinmp3.com/fetch/?video=https://www.youtube.com" + first_url);
+//                Log.i("\n yinmp3 ","url = "+urlforyimp3);
+//
+//
+//                Document sd;
+//                    sd = Jsoup.connect(urlforyimp3).timeout(6000).get();
+//
+//
+//                    Elements ele2 = sd.select("div.infoBox");
+//
+//                    Log.i("came here","got html page");
+                    Log.i(" final url is ",finalurl);
+//
+//
+//                    for (Element element2 : ele2.select("p")) {
+//
+//                        finalurl = "http://www.youtubeinmp3.com" + element2.select("a.button.fullWidth").attr("href");
+//                        Log.i("\n\nhtml page\n\n",finalurl);
+//
+//                    }
 
                 }catch (Exception e) {
                     e.printStackTrace();
-                    flagToDifferenciateUrl = 1;
-                    finalurl = urlforyimp3 ;
+//                    flagToDifferenciateUrl = 1;
+//                    finalurl = urlforyimp3 ;
 
                 } finally {
 
-                    if ( finalurl!="" && flagToDifferenciateUrl==1) {
-                        flagToDifferenciateUrl=0;
+                    if ( !finalurl.equals(" ") ) {
+//                        flagToDifferenciateUrl=0;
                         downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                         Uri Download_Uri = Uri.parse(finalurl);
                         DownloadManager.Request request = new DownloadManager.Request(Download_Uri);
@@ -160,8 +165,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     }
                     else
                     {
-                        Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(finalurl));
-                        startActivity(viewIntent);
+//                        Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(finalurl));
+//                        startActivity(viewIntent);
+                        Toast.makeText(MainActivity.this, "Cant Download the entered song, try someother song :)", LENGTH_SHORT).show();
+
                     }
 
                 }
@@ -183,18 +190,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
             if (songname.getText().toString().equals("") ) {
                 Toast.makeText(MainActivity.this, "Enter Text", LENGTH_SHORT).show();
-//                Log.v("\nCAME HERE 1\n\n", String.valueOf(songname.getText()));
             }else if(!isConnected){
                 Toast.makeText(MainActivity.this, "No Internet Connectivity!", LENGTH_SHORT).show();
 
             } else {
                 String songName = songname.getText().toString();
-//                songName.replaceAll(" ","+");
 
                 downloader task=new downloader();
-//                downloader.sname=songName;
-//                Log.v("\nCAME HERE 1\n\n", String.valueOf(songname.getText()));
-//                Toast.makeText(MainActivity.this,"hi", LENGTH_SHORT).show();
 
                 Log.i("\nCAME HERE on click \n\n","came here ");
 
@@ -203,10 +205,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-//                Log.v("\nCAME HERE 3\n\n",null);
-
-//                task
-
 
             }
         }//end of on click method
